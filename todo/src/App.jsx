@@ -25,8 +25,11 @@ function App() {
         return e;
       })
     );
-    localStorage.setItem("todoList", JSON.stringify(list));
+    handlels()
   };
+  const handlels = ()=>{
+    localStorage.setItem("todoList", JSON.stringify(list));
+  }
   const handleDelete = (id) => {
     const newData = list.filter((e) => {
       return e.id !== id;
@@ -44,12 +47,20 @@ function App() {
   }, []);
   return (
     <div className="todo-app">
-      <h1>Add your Todo here</h1>
+      <h1>Add Your Tasks</h1>
       <div className="App" className="todo-form">
         <input
           type="text"
           value={text}
           className="todo-input"
+          onKeyUp={(e) => {
+            if (e.keyCode === 13) {
+              // Cancel the default action, if needed
+              e.preventDefault();
+              handleAdd();
+            }
+          }}
+          placeholder="Add todo here"
           name=""
           onChange={(e) => setText(e.target.value)}
           id=""
@@ -72,7 +83,7 @@ function App() {
               >
                 <p>{e.title}</p>
                 <div className="icons">
-                  <MdDoneOutline className="delete-icon" onClick={() => handleToogle(e.id)}/>
+                  {e.status ? "" : <MdDoneOutline className="delete-icon" onClick={() => handleToogle(e.id)}/>}
                   <RiCloseCircleLine onClick={() => handleDelete(e.id)} className="delete-icon"  />
                 </div>
               </div>
